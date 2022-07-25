@@ -8,8 +8,6 @@ model DefrostScenario
     annotation (Placement(transformation(extent={{0,-14},{12,-2}})));
   Modelica.Blocks.Sources.Constant phiAir(k=70)
     annotation (Placement(transformation(extent={{0,-34},{12,-22}})));
-  Modelica.Blocks.Sources.Constant VflowAir(k=0.32)
-    annotation (Placement(transformation(extent={{0,-54},{12,-42}})));
   Modelica.Blocks.Sources.Constant VflowLiq(k=15/60000)
     annotation (Placement(transformation(extent={{-50,90},{-30,110}})));
   Modelica.Blocks.Sources.Constant TliqIn(k=30)
@@ -66,8 +64,6 @@ equation
     annotation (Line(points={{12.6,-8},{20,-8},{20,26.4}}, color={0,0,127}));
   connect(phiAir.y, heatPumpCycle_Propane_FMU.phiAirInlet)
     annotation (Line(points={{12.6,-28},{24,-28},{24,26.4}},color={0,0,127}));
-  connect(VflowAir.y, heatPumpCycle_Propane_FMU.VflowAir) annotation (Line(
-        points={{12.6,-48},{28.4,-48},{28.4,26.4}},  color={0,0,127}));
   connect(VflowLiq.y, heatPumpCycle_Propane_FMU.VflowLiq) annotation (Line(
         points={{-29,100},{0,100},{0,50},{10.6,50}}, color={0,0,127}));
   connect(TliqIn.y, heatPumpCycle_Propane_FMU.TliqInlet_degC)
