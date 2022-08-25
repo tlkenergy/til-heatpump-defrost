@@ -1,6 +1,5 @@
 within TIL_HeatPumpDefrost;
-package Cycles
+package Controls
   extends TIL.Internals.ClassTypes.ModelPackage;
 
-
-end Cycles;
+end Controls;

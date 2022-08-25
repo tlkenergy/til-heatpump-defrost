@@ -1,13 +1,13 @@
-within TIL_HeatPumpDefrost.Cycles;
-model DefrostScenario
+within TIL_HeatPumpDefrost.Examples;
+model QdotDefrost
   extends TIL.Internals.ClassTypes.ExampleModel;
   // components
-  HeatPumpCycle_Propane heatPumpCycle_Propane_FMU
+  Cycles.HeatPumpCycle_Propane heatPumpCycle_Propane_FMU
     annotation (Placement(transformation(extent={{12,28},{50,52}})));
   Modelica.Blocks.Sources.Constant TairIn(k=7)
-    annotation (Placement(transformation(extent={{0,-14},{12,-2}})));
+    annotation (Placement(transformation(extent={{2,4},{14,16}})));
   Modelica.Blocks.Sources.Constant phiAir(k=70)
-    annotation (Placement(transformation(extent={{0,-34},{12,-22}})));
+    annotation (Placement(transformation(extent={{2,-14},{14,-2}})));
   Modelica.Blocks.Sources.Constant VflowLiq(k=15/60000)
     annotation (Placement(transformation(extent={{-50,90},{-30,110}})));
   Modelica.Blocks.Sources.Constant TliqIn(k=30)
@@ -34,58 +34,33 @@ model DefrostScenario
   output Real fillingLevelSeparator = heatPumpCycle_Propane_FMU.fillingLevelSeparator;
   output Modelica.Units.SI.Mass mass_ice = heatPumpCycle_Propane_FMU.mass_ice;
 
-  TIL.OtherComponents.Controllers.PIController subcooling_controller(
-    controllerType="PI",
-    invertFeedback=true,
-    k=0.01,
-    Ti=100,
-    yMax=1,
-    yMin=0,
-    yInitial=0.3,
-    use_activeInput=true,
-    activationTime=100)
-    annotation (Placement(transformation(extent={{-46,26},{-34,14}})));
   Modelica.Blocks.Sources.RealExpression dT_sc_meas(y=heatPumpCycle_Propane_FMU.dT_sc)
-    annotation (Placement(transformation(extent={{-100,34},{-80,54}})));
+    annotation (Placement(transformation(extent={{-104,-36},{-84,-16}})));
   Modelica.Blocks.Sources.Constant
                                dT_sc_setpoint(k=0.4)
-    annotation (Placement(transformation(extent={{-100,10},{-80,30}})));
-  Modelica.Blocks.Sources.BooleanPulse reverseCycle(
-    width=10,
-    period=1000,
-    startTime=500)  annotation (Placement(transformation(extent={{100,-90},{80,-70}})));
-  Modelica.Blocks.Sources.Constant
-                                compressor(k=0.5)
-    annotation (Placement(transformation(extent={{98,30},{78,50}})));
-  Modelica.Blocks.Logical.Not not1
-    annotation (Placement(transformation(extent={{-2,-90},{-22,-70}})));
+    annotation (Placement(transformation(extent={{-140,-28},{-120,-8}})));
+  Controls.QdotDefrost        heatPumpController
+    annotation (Placement(transformation(extent={{82,-36},{102,-16}})));
 equation
   connect(TairIn.y, heatPumpCycle_Propane_FMU.TairInlet_degC)
-    annotation (Line(points={{12.6,-8},{20,-8},{20,26.4}}, color={0,0,127}));
+    annotation (Line(points={{14.6,10},{20,10},{20,26.4}}, color={0,0,127}));
   connect(phiAir.y, heatPumpCycle_Propane_FMU.phiAirInlet)
-    annotation (Line(points={{12.6,-28},{24,-28},{24,26.4}},color={0,0,127}));
+    annotation (Line(points={{14.6,-8},{24,-8},{24,26.4}},  color={0,0,127}));
   connect(VflowLiq.y, heatPumpCycle_Propane_FMU.VflowLiq) annotation (Line(
         points={{-29,100},{0,100},{0,50},{10.6,50}}, color={0,0,127}));
   connect(TliqIn.y, heatPumpCycle_Propane_FMU.TliqInlet_degC)
     annotation (Line(points={{-29,60},{-10,60},{-10,46},{10.6,46}}, color={0,0,127}));
-  connect(subcooling_controller.y, heatPumpCycle_Propane_FMU.eevRelPos)
-    annotation (Line(points={{-33.6,20},{-10,20},{-10,40},{10.4,40}}, color={0,
-          0,127}));
-  connect(dT_sc_meas.y, subcooling_controller.u_m)
-    annotation (Line(points={{-79,44},{-40,44},{-40,25.8}}, color={0,0,127}));
-  connect(dT_sc_setpoint.y, subcooling_controller.u_s) annotation (Line(points={{-79,20},{
-          -45.6,20}},                            color={0,0,127}));
-  connect(reverseCycle.y, heatPumpCycle_Propane_FMU.reverseCycle) annotation (Line(points={{79,-80},
-          {32,-80},{32,22},{33.2,22},{33.2,26.4}},         color={255,0,255}));
-  connect(heatPumpCycle_Propane_FMU.relDisplacement, compressor.y)
-    annotation (Line(points={{51.6,40},{77,40}}, color={0,0,127}));
-  connect(not1.u, reverseCycle.y)
-    annotation (Line(points={{0,-80},{79,-80}}, color={255,0,255}));
-  connect(not1.y, subcooling_controller.activeInput) annotation (Line(points={{-23,-80},{-54,
-          -80},{-54,23.8},{-45.6,23.8}}, color={255,0,255}));
+  connect(heatPumpCycle_Propane_FMU.sensors, heatPumpController.sensors)
+    annotation (Line(points={{50,34},{72,34},{72,-26},{82,-26}}, color={0,0,0}));
+  connect(heatPumpController.actuators, heatPumpCycle_Propane_FMU.actuators) annotation (
+      Line(points={{102,-26},{124,-26},{124,-76},{-62,-76},{-62,34},{12.2,34}}, color={0,0,
+          0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
             -120},{160,120}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-120},{160,
             120}})),
-    experiment(StopTime=10000, __Dymola_Algorithm="Dassl"));
-end DefrostScenario;
+    experiment(
+      StopTime=10000,
+      Tolerance=1e-05,
+      __Dymola_Algorithm="Cvode"));
+end QdotDefrost;

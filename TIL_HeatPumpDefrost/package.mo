@@ -1,5 +1,7 @@
 within ;
 package TIL_HeatPumpDefrost
+  import Modelica.Units.SI;
+
 annotation (uses(
     TIL(version="3.12.0 HD"),
     TILMedia(version="3.12.0"),
