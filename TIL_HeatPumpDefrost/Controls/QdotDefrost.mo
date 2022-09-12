@@ -73,12 +73,12 @@ public
 
     Modelica.Clocked.RealSignals.NonPeriodic.PI
                                        PI(
-      x(fixed=true, start=30),
+      x(fixed=true, start=15),
       T=100,
-      k=0.01)
+      k=0.02)
              annotation (Placement(transformation(extent={{-2,-6},{18,14}})));
     Modelica.Blocks.Sources.Constant
-                                 dT_sc_setpoint(k=0.4)
+                                 dT_sc_setpoint(k=2)
       annotation (Placement(transformation(extent={{-54,-28},{-42,-16}})));
     Modelica.Blocks.Math.Feedback feedback
       annotation (Placement(transformation(extent={{-35,-6},{-15,14}})));

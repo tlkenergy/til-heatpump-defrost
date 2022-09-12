@@ -105,7 +105,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   TIL.VLEFluidComponents.Separators.Separator separator(
     pressureStateID=3,
     enableHeatPort=false,
-    V(displayUnit="l") = 0.002,
+    V(displayUnit="l") = 0.001,
     initialFillingLevel=0.65)
                 annotation (Placement(transformation(extent={{90,-24},{102,-4}})));
   TIL.GasComponents.Boundaries.Boundary boundary(boundaryType="p")
@@ -438,7 +438,7 @@ equation
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(firstOrder_Tair_in.y, sensors.T_air) annotation (Line(points={{-100,-71.2},{-100,
-          -62},{102,-62},{102,-30},{184,-30},{184,-59.95},{200.05,-59.95}}, color={0,0,127}),
+          -62},{130,-62},{130,-34},{184,-34},{184,-59.95},{200.05,-59.95}}, color={0,0,127}),
       Text(
       string="%second",
       index=1,

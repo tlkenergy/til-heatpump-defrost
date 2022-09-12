@@ -11,7 +11,7 @@ model QdotDefrost
   Modelica.Blocks.Sources.Constant VflowLiq(k=15/60000)
     annotation (Placement(transformation(extent={{-50,90},{-30,110}})));
   Modelica.Blocks.Sources.Constant TliqIn(k=30)
-    annotation (Placement(transformation(extent={{-50,50},{-30,70}})));
+    annotation (Placement(transformation(extent={{-100,36},{-80,56}})));
 
   // Outputs
   output Modelica.Units.SI.Pressure pHigh = heatPumpCycle_Propane_FMU.pHigh;
@@ -41,6 +41,11 @@ model QdotDefrost
     annotation (Placement(transformation(extent={{-140,-28},{-120,-8}})));
   Controls.QdotDefrost        heatPumpController
     annotation (Placement(transformation(extent={{82,-36},{102,-16}})));
+  Modelica.Blocks.Sources.Ramp ramp(
+    height=10,
+    duration=10,
+    offset=30,
+    startTime=3500) annotation (Placement(transformation(extent={{-54,50},{-34,70}})));
 equation
   connect(TairIn.y, heatPumpCycle_Propane_FMU.TairInlet_degC)
     annotation (Line(points={{14.6,10},{20,10},{20,26.4}}, color={0,0,127}));
@@ -48,19 +53,19 @@ equation
     annotation (Line(points={{14.6,-8},{24,-8},{24,26.4}},  color={0,0,127}));
   connect(VflowLiq.y, heatPumpCycle_Propane_FMU.VflowLiq) annotation (Line(
         points={{-29,100},{0,100},{0,50},{10.6,50}}, color={0,0,127}));
-  connect(TliqIn.y, heatPumpCycle_Propane_FMU.TliqInlet_degC)
-    annotation (Line(points={{-29,60},{-10,60},{-10,46},{10.6,46}}, color={0,0,127}));
   connect(heatPumpCycle_Propane_FMU.sensors, heatPumpController.sensors)
     annotation (Line(points={{50,34},{72,34},{72,-26},{82,-26}}, color={0,0,0}));
   connect(heatPumpController.actuators, heatPumpCycle_Propane_FMU.actuators) annotation (
       Line(points={{102,-26},{124,-26},{124,-76},{-62,-76},{-62,34},{12.2,34}}, color={0,0,
           0}));
+  connect(ramp.y, heatPumpCycle_Propane_FMU.TliqInlet_degC)
+    annotation (Line(points={{-33,60},{-2,60},{-2,46},{10.6,46}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
             -120},{160,120}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-120},{160,
             120}})),
     experiment(
-      StopTime=10000,
+      StopTime=6000,
       Tolerance=1e-05,
       __Dymola_Algorithm="Cvode"));
 end QdotDefrost;
