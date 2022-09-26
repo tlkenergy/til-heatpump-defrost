@@ -34,7 +34,7 @@ Modelica.Clocked.ClockSignals.Clocks.PeriodicExactClock
   Real epsilon;
 
 equation
-  epsilon = (sensors.Qdot_cond - sensors.P_comp)/(sensors.T_air - sensors.T_evap);
+  epsilon = (sensors.Qdot_cond - sensors.P_comp)/(sensors.T_air - sensors.T_evap) "Evaporator heat flow rate / Temperature difference";
 
   connect(comp.y, actuators.comp) annotation (Line(points={{64.6,-34},{86,-34},{86,0.05},{100.05,
           0.05}}, color={0,0,127}), Text(

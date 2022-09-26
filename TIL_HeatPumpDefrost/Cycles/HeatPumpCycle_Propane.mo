@@ -36,12 +36,12 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     boundaryType="V_flow") annotation (Placement(transformation(extent={{-40,70},
             {-32,90}}, rotation=0)));
 
-  TIL.VLEFluidComponents.Sensors.StatePoint statePoint1(stateViewerIndex=1)
+  Components.StatePoint                     statePoint1(stateViewerIndex=1)
     annotation (Placement(transformation(
         origin={116,-2},
         extent={{-4,-4},{4,4}},
         rotation=0)));
-  TIL.VLEFluidComponents.Sensors.StatePoint statePoint2(stateViewerIndex=2)
+  Components.StatePoint                     statePoint2(stateViewerIndex=2)
     annotation (Placement(transformation(extent={{102,54},{110,62}},
                                                                    rotation=0)));
 
@@ -92,9 +92,9 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     pInitial=400000,
     TDewInitial=273.15)                   annotation (Placement(transformation(
           extent={{-52,-16},{-40,-4}},  rotation=0)));
-  TIL.VLEFluidComponents.Sensors.StatePoint statePoint0(stateViewerIndex=0)
+  Components.StatePoint                     statePoint0(stateViewerIndex=0)
     annotation (Placement(transformation(extent={{42,4},{50,12}},    rotation=0)));
-  TIL.VLEFluidComponents.Sensors.StatePoint statePoint5(stateViewerIndex=4)
+  Components.StatePoint                     statePoint4(stateViewerIndex=4)
     annotation (Placement(transformation(extent={{-38,20},{-30,28}},   rotation=
            0)));
   inner TIL.SystemInformationManager sim(
@@ -228,7 +228,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
         origin={-156,60})));
   Components.FourWayValve fourWayValve_ph "Only used to dynamically switch ph StatePoints"
     annotation (Placement(transformation(extent={{-64,20},{-44,40}})));
-  TIL.VLEFluidComponents.Sensors.StatePoint statePoint3(stateViewerIndex=3)
+  Components.StatePoint                     statePoint3(stateViewerIndex=3)
     annotation (Placement(transformation(extent={{-44,44},{-36,52}},   rotation=
            0)));
   TIL.GasComponents.Fans.Fan2ndOrder fan2ndOrder(
@@ -252,6 +252,17 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Modelica.Blocks.Sources.RealExpression realExpression5(y=evaporator.summary.T_vle_A)
     annotation (Placement(transformation(extent={{140,-138},{160,-118}})));
 equation
+
+  connect(statePoint0._p, sensors.p0);
+  connect(statePoint0._h, sensors.h0);
+  connect(statePoint1._p, sensors.p1);
+  connect(statePoint1._h, sensors.h1);
+  connect(statePoint2._p, sensors.p2);
+  connect(statePoint2._h, sensors.h2);
+  connect(statePoint3._p, sensors.p3);
+  connect(statePoint3._h, sensors.h3);
+  connect(statePoint4._p, sensors.p4);
+  connect(statePoint4._h, sensors.h4);
 
   connect(pressureState_lp.portB, valve.portB) annotation (Line(
       points={{-52,-10},{-80,-10},{-80,6}},
@@ -357,7 +368,7 @@ equation
       points={{46,4},{46,0},{39,0},{39,-10},{46,-10}},
       color={153,204,0},
       thickness=0.5));
-  connect(fourWayValve_ph.portB_a, statePoint5.sensorPort) annotation (Line(
+  connect(fourWayValve_ph.portB_a,statePoint4. sensorPort) annotation (Line(
       points={{-47,23},{-47,14},{-34,14},{-34,20}},
       color={153,204,0},
       thickness=0.5));

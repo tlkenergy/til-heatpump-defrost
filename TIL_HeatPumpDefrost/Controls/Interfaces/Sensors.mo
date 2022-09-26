@@ -10,6 +10,18 @@ expandable connector Sensors
   SI.Temperature T_air "Air inlet temperature";
   SI.Temperature T_evap "Evaporation temperature";
 
+  // StatePoints
+  SI.Pressure p0;
+  SI.SpecificEnthalpy h0;
+  SI.Pressure p1;
+  SI.SpecificEnthalpy h1;
+  SI.Pressure p2;
+  SI.SpecificEnthalpy h2;
+  SI.Pressure p3;
+  SI.SpecificEnthalpy h3;
+  SI.Pressure p4;
+  SI.SpecificEnthalpy h4;
+
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(
           preserveAspectRatio=false)));
