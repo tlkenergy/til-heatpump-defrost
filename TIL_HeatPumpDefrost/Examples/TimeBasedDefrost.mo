@@ -3,15 +3,15 @@ model TimeBasedDefrost
   extends TIL.Internals.ClassTypes.ExampleModel;
   // components
   Cycles.HeatPumpCycle_Propane heatPumpCycle_Propane_FMU
-    annotation (Placement(transformation(extent={{12,28},{50,52}})));
-  Modelica.Blocks.Sources.Constant TairIn(k=7)
-    annotation (Placement(transformation(extent={{2,4},{14,16}})));
+    annotation (Placement(transformation(extent={{6,-36},{44,-12}})));
+  Modelica.Blocks.Sources.Constant TairIn(k=7.1)
+    annotation (Placement(transformation(extent={{-138,26},{-126,38}})));
   Modelica.Blocks.Sources.Constant phiAir(k=70)
-    annotation (Placement(transformation(extent={{2,-14},{14,-2}})));
+    annotation (Placement(transformation(extent={{-138,46},{-126,58}})));
   Modelica.Blocks.Sources.Constant VflowLiq(k=15/60000)
-    annotation (Placement(transformation(extent={{-50,90},{-30,110}})));
+    annotation (Placement(transformation(extent={{-138,0},{-126,12}})));
   Modelica.Blocks.Sources.Constant TliqIn(k=30)
-    annotation (Placement(transformation(extent={{-50,50},{-30,70}})));
+    annotation (Placement(transformation(extent={{-138,-22},{-126,-10}})));
 
   // Outputs
   output Modelica.Units.SI.Pressure pHigh = heatPumpCycle_Propane_FMU.pHigh;
@@ -36,28 +36,48 @@ model TimeBasedDefrost
 
   output Real epsilon = (Qflow_cond - Pshaft_comp)/(heatPumpCycle_Propane_FMU.evaporator.summary.T_air_A-heatPumpCycle_Propane_FMU.evaporator.summary.T_vle_A);
 
-  Modelica.Blocks.Sources.RealExpression dT_sc_meas(y=heatPumpCycle_Propane_FMU.dT_sc)
-    annotation (Placement(transformation(extent={{-104,-36},{-84,-16}})));
-  Modelica.Blocks.Sources.Constant
-                               dT_sc_setpoint(k=0.4)
-    annotation (Placement(transformation(extent={{-140,-28},{-120,-8}})));
   Controls.ContinuousController
                               heatPumpController
-    annotation (Placement(transformation(extent={{82,-38},{102,-18}})));
+    annotation (Placement(transformation(extent={{70,-40},{90,-20}})));
+  Controls.Interfaces.Actuators actuators annotation (Placement(transformation(extent={{-12,4},
+            {-8,8}}),      iconTransformation(extent={{-12,4},{-8,8}})));
 equation
-  connect(TairIn.y, heatPumpCycle_Propane_FMU.TairInlet_degC)
-    annotation (Line(points={{14.6,10},{20,10},{20,26.4}}, color={0,0,127}));
-  connect(phiAir.y, heatPumpCycle_Propane_FMU.phiAirInlet)
-    annotation (Line(points={{14.6,-8},{24,-8},{24,26.4}},  color={0,0,127}));
-  connect(VflowLiq.y, heatPumpCycle_Propane_FMU.VflowLiq) annotation (Line(
-        points={{-29,100},{0,100},{0,50},{10.6,50}}, color={0,0,127}));
-  connect(TliqIn.y, heatPumpCycle_Propane_FMU.TliqInlet_degC)
-    annotation (Line(points={{-29,60},{-10,60},{-10,46},{10.6,46}}, color={0,0,127}));
   connect(heatPumpCycle_Propane_FMU.sensors, heatPumpController.sensors)
-    annotation (Line(points={{50,34},{72,34},{72,-28},{82,-28}}, color={0,0,0}));
+    annotation (Line(points={{44,-30},{70,-30}},                 color={0,0,0}));
   connect(heatPumpController.actuators, heatPumpCycle_Propane_FMU.actuators) annotation (
-      Line(points={{102,-28},{124,-28},{124,-76},{-62,-76},{-62,34},{12.2,34}}, color={0,0,
+      Line(points={{90,-30},{94,-30},{94,-44},{-2,-44},{-2,-30},{6.2,-30}},     color={0,0,
           0}));
+  connect(TliqIn.y, actuators.TliqInlet_degC) annotation (Line(points={{-125.4,-16},{-10,-16},
+          {-10,6}},color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(VflowLiq.y, actuators.VflowLiq) annotation (Line(points={{-125.4,6},{-10,6}},
+        color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(actuators, heatPumpCycle_Propane_FMU.actuators) annotation (Line(points={{-10,6},{
+          -10,-30},{6.2,-30}},
+                             color={0,0,0}), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(TairIn.y, actuators.TairInlet_degC) annotation (Line(points={{-125.4,32},{-10,32},
+          {-10,6}},color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(phiAir.y, actuators.phiAirInlet) annotation (Line(points={{-125.4,52},{-10,52},{
+          -10,6}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
             -120},{160,120}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-120},{160,

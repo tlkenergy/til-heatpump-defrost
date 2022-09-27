@@ -137,27 +137,13 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
       mdot_nominal=0.1, dp_nominal=1000)
     annotation (Placement(transformation(extent={{46,-12},{58,-8}})));
   // Inputs
-  Modelica.Blocks.Interfaces.RealInput TliqInlet_degC(start=30)
-    annotation (Placement(transformation(extent={{-214,40},{-174,80}})));
-  Modelica.Blocks.Interfaces.RealInput VflowLiq(start=15/60000)
-    annotation (Placement(transformation(extent={{-214,80},{-174,120}})));
-  Modelica.Blocks.Interfaces.RealInput TairInlet_degC(start=5) annotation (Placement(
-        transformation(
-        extent={{-20,-20},{20,20}},
-        rotation=90,
-        origin={-100,-136})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder_phi_air_in(
     k=1,
     T=1,
     y_start=85) annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
-        rotation=270,
-        origin={-60,-80})));
-  Modelica.Blocks.Interfaces.RealInput phiAirInlet(start=278.15) annotation (
-      Placement(transformation(
-        extent={{-20,-20},{20,20}},
-        rotation=90,
-        origin={-60,-136})));
+        rotation=180,
+        origin={-44,-108})));
   // wrapper
   Modelica.Blocks.Nonlinear.Limiter limiter(uMax=1, uMin=0.10)
     annotation (Placement(transformation(extent={{186,-8},{170,8}})));
@@ -179,8 +165,8 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     T=1,
     y_start=298.15) annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
-        rotation=270,
-        origin={-100,-80})));
+        rotation=180,
+        origin={-100,-84})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder_liq_Vflow_in(
     k=-1,
     T=1,
@@ -196,6 +182,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
         rotation=0,
         origin={-130,60})));
   // Outputs
+  /*
   Modelica.Blocks.Interfaces.RealOutput pHigh = compressor.summary.p_vle_B annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput pLow = compressor.summary.p_vle_A annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput Qflow_cond = condenser.summary.path_b.Q_flow_liq annotation (Placement);
@@ -215,12 +202,13 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Modelica.Blocks.Interfaces.RealOutput dT_sh = evaporator.summary.superheating annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput fillingLevelSeparator = separator.fillingLevel annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput mass_ice = evaporator.summary.mass_water annotation (Placement);
+  */
 
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC annotation (Placement(
         transformation(
         extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={-100,-102})));
+        rotation=0,
+        origin={-126,-84})));
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC1 annotation (Placement(
         transformation(
         extent={{-6,-6},{6,6}},
@@ -344,24 +332,16 @@ equation
           10.4},{-135.2,10.4}}, color={0,0,127}));
   connect(minValveOpening.y, add.u1) annotation (Line(points={{-145.5,31},{-140,
           31},{-140,17.6},{-135.2,17.6}}, color={0,0,127}));
-  connect(firstOrder_Tair_in.y, boundary1.T_in) annotation (Line(points={{-100,-71.2},{-100,
-          -62},{-24,-62},{-24,-56}},       color={0,0,127}));
-  connect(VflowLiq, firstOrder_liq_Vflow_in.u)
-    annotation (Line(points={{-194,100},{-137.6,100}}, color={0,0,127}));
+  connect(firstOrder_Tair_in.y, boundary1.T_in) annotation (Line(points={{-91.2,-84},{-90,-84},
+          {-90,-62},{-24,-62},{-24,-56}},  color={0,0,127}));
   connect(firstOrder_liq_Vflow_in.y, condIn.V_flow_in) annotation (Line(points={
           {-119.2,100},{-100,100},{-100,82},{-40,82}}, color={0,0,127}));
   connect(firstOrder_liq_Vflow_in1.y, condIn.T_in) annotation (Line(points={{-121.2,
           60},{-100,60},{-100,78},{-40,78}}, color={0,0,127}));
-  connect(phiAirInlet, firstOrder_phi_air_in.u)
-    annotation (Line(points={{-60,-136},{-60,-89.6}}, color={0,0,127}));
-  connect(firstOrder_phi_air_in.y, boundary1.phi_in) annotation (Line(points={{-60,-71.2},{
-          -60,-64},{-20,-64},{-20,-56}},         color={0,0,127}));
-  connect(TairInlet_degC, from_degC.u)
-    annotation (Line(points={{-100,-136},{-100,-109.2}}, color={0,0,127}));
+  connect(firstOrder_phi_air_in.y, boundary1.phi_in) annotation (Line(points={{-35.2,-108},{-20,
+          -108},{-20,-56}},                      color={0,0,127}));
   connect(from_degC.y, firstOrder_Tair_in.u)
-    annotation (Line(points={{-100,-95.4},{-100,-89.6}}, color={0,0,127}));
-  connect(TliqInlet_degC, from_degC1.u)
-    annotation (Line(points={{-194,60},{-163.2,60}}, color={0,0,127}));
+    annotation (Line(points={{-119.4,-84},{-109.6,-84}}, color={0,0,127}));
   connect(from_degC1.y, firstOrder_liq_Vflow_in1.u)
     annotation (Line(points={{-149.4,60},{-139.6,60}}, color={0,0,127}));
   connect(statePoint0.sensorPort, linearHydraulicResistor.portA) annotation (Line(
@@ -448,8 +428,8 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(firstOrder_Tair_in.y, sensors.T_air) annotation (Line(points={{-100,-71.2},{-100,
-          -62},{130,-62},{130,-34},{184,-34},{184,-59.95},{200.05,-59.95}}, color={0,0,127}),
+  connect(firstOrder_Tair_in.y, sensors.T_air) annotation (Line(points={{-91.2,-84},{-24,-84},
+          {-24,-62},{200,-62},{200,-59.95},{200.05,-59.95}},                color={0,0,127}),
       Text(
       string="%second",
       index=1,
@@ -461,6 +441,30 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
+  connect(from_degC1.u, actuators.TliqInlet_degC) annotation (Line(points={{-163.2,60},{-194,
+          60},{-194,-60},{-178,-60}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(firstOrder_liq_Vflow_in.u, actuators.VflowLiq) annotation (Line(points={{-137.6,100},
+          {-194,100},{-194,-60},{-178,-60}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(from_degC.u, actuators.TairInlet_degC) annotation (Line(points={{-133.2,-84},{-160,
+          -84},{-160,-60},{-178,-60}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(firstOrder_phi_air_in.u, actuators.phiAirInlet) annotation (Line(points={{-53.6,-108},
+          {-88,-108},{-88,-118},{-196,-118},{-196,-60},{-178,-60}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (Diagram(coordinateSystem(extent={{-180,-120},{200,120}})), Icon(
         coordinateSystem(extent={{-180,-120},{200,120}})));
 end HeatPumpCycle_Propane;
