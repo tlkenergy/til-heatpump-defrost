@@ -201,8 +201,10 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Modelica.Blocks.Interfaces.RealOutput dT_sc = sensor_subcooling.sensorValue annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput dT_sh = evaporator.summary.superheating annotation (Placement);
   Modelica.Blocks.Interfaces.RealOutput fillingLevelSeparator = separator.fillingLevel annotation (Placement);
-  Modelica.Blocks.Interfaces.RealOutput mass_ice = evaporator.summary.mass_water annotation (Placement);
   */
+
+  SI.Mass mass_ice = evaporator.summary.mass_water;
+
 
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC annotation (Placement(
         transformation(
