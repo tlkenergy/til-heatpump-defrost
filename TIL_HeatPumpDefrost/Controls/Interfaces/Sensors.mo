@@ -9,6 +9,11 @@ expandable connector Sensors
   SI.Power P_comp "Compressor power";
   SI.Temperature T_air "Air inlet temperature";
   SI.Temperature T_evap "Evaporation temperature";
+  Real fillingLevelSeparator;
+  Real COP;
+  Real TliqOutlet_degC;
+  Real TairOutlet_degC;
+  Real m_flow_air;
 
   // StatePoints
   SI.Pressure p0;

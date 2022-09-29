@@ -71,11 +71,12 @@ public
      outer output Boolean reverseCycle;
 
 
-    Modelica.Clocked.RealSignals.NonPeriodic.PI
-                                       PI(
+    LimPI                              PI(
       x(fixed=true, start=15),
       T=100,
-      k=0.02)
+      k=0.02,
+      yMax=1,
+      yMin=0.1)
              annotation (Placement(transformation(extent={{-2,-6},{18,14}})));
     Modelica.Blocks.Sources.Constant
                                  dT_sc_setpoint(k=2)

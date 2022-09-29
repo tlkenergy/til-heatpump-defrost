@@ -100,7 +100,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   inner TIL.SystemInformationManager sim(
     redeclare TILMedia.GasTypes.VDI4670_MoistAir gasType1,
     redeclare replaceable TILMedia.LiquidTypes.TILMedia_Water liquidType1,
-    redeclare replaceable VLEFluidTypes.TILMedia_Propane vleFluidType1)
+    redeclare replaceable TILMedia.VLEFluidTypes.TILMediaSpline_PROPANE_60x60 vleFluidType1)
     annotation (Placement(transformation(extent={{160,80},{180,100}})));
   TIL.VLEFluidComponents.Separators.Separator separator(
     pressureStateID=3,
@@ -152,14 +152,10 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     T=1,
     y_start=0.3)
     annotation (Placement(transformation(extent={{156,-8},{140,8}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter1(uMax=1.5e-6, uMin=1e-7)
+  Modelica.Blocks.Nonlinear.Limiter limiter1(uMax=1, uMin=0.1)
+    annotation (Placement(transformation(extent={{-142,6},{-126,22}})));
+  Modelica.Blocks.Math.Gain gain(k=1.5e-6)
     annotation (Placement(transformation(extent={{-112,6},{-96,22}})));
-  Modelica.Blocks.Math.Gain gain(k=1.5e-6 - 1e-7)
-    annotation (Placement(transformation(extent={{-164,-8},{-148,8}})));
-  Modelica.Blocks.Math.Add add
-    annotation (Placement(transformation(extent={{-134,8},{-122,20}})));
-  Modelica.Blocks.Sources.Constant minValveOpening(k=1e-7)
-    annotation (Placement(transformation(extent={{-156,26},{-146,36}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder_Tair_in(
     k=1,
     T=1,
@@ -205,7 +201,6 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
 
   SI.Mass mass_ice = evaporator.summary.mass_water;
 
-
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC annotation (Placement(
         transformation(
         extent={{-6,-6},{6,6}},
@@ -241,7 +236,21 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
   Modelica.Blocks.Sources.RealExpression realExpression5(y=evaporator.summary.T_vle_A)
     annotation (Placement(transformation(extent={{140,-138},{160,-118}})));
+  Modelica.Blocks.Sources.RealExpression realExpression6(y=separator.fillingLevel)
+    annotation (Placement(transformation(extent={{140,-156},{160,-136}})));
+  Modelica.Blocks.Sources.RealExpression realExpression7(y=condenser.summary.path_b.Q_flow_liq
+        /compressor.summary.P_shaft)
+    annotation (Placement(transformation(extent={{140,-174},{160,-154}})));
+  Modelica.Blocks.Sources.RealExpression realExpression8(y=condenser.summary.path_b.T_degC_liq_A)
+    annotation (Placement(transformation(extent={{140,-190},{160,-170}})));
+  Modelica.Blocks.Sources.RealExpression realExpression9(y=evaporator.summary.T_degC_air_B)
+    annotation (Placement(transformation(extent={{140,-206},{160,-186}})));
+  Modelica.Blocks.Sources.RealExpression realExpression10(y=evaporator.summary.m_flow_air_A)
+    annotation (Placement(transformation(extent={{140,-224},{160,-204}})));
+  Modelica.Blocks.Sources.RealExpression realExpression11(y=mass_ice)
+    annotation (Placement(transformation(extent={{140,-240},{160,-220}})));
 equation
+
 
   connect(statePoint0._p, sensors.p0);
   connect(statePoint0._h, sensors.h0);
@@ -326,16 +335,8 @@ equation
     annotation (Line(points={{169.2,0},{157.6,0}}, color={0,0,127}));
   connect(firstOrder_comp.y, compressor.relDisplacement_in) annotation (Line(
         points={{139.2,0},{130,0},{130,20},{117,20}}, color={0,0,127}));
-  connect(limiter1.y, valve.effectiveFlowArea_in)
-    annotation (Line(points={{-95.2,14},{-85,14}}, color={0,0,127}));
-  connect(limiter1.u, add.y)
-    annotation (Line(points={{-113.6,14},{-121.4,14}}, color={0,0,127}));
-  connect(gain.y, add.u2) annotation (Line(points={{-147.2,0},{-141.2,0},{-141.2,
-          10.4},{-135.2,10.4}}, color={0,0,127}));
-  connect(minValveOpening.y, add.u1) annotation (Line(points={{-145.5,31},{-140,
-          31},{-140,17.6},{-135.2,17.6}}, color={0,0,127}));
-  connect(firstOrder_Tair_in.y, boundary1.T_in) annotation (Line(points={{-91.2,-84},{-90,-84},
-          {-90,-62},{-24,-62},{-24,-56}},  color={0,0,127}));
+  connect(firstOrder_Tair_in.y, boundary1.T_in) annotation (Line(points={{-91.2,-84},{-24,-84},
+          {-24,-56}},                      color={0,0,127}));
   connect(firstOrder_liq_Vflow_in.y, condIn.V_flow_in) annotation (Line(points={
           {-119.2,100},{-100,100},{-100,82},{-40,82}}, color={0,0,127}));
   connect(firstOrder_liq_Vflow_in1.y, condIn.T_in) annotation (Line(points={{-121.2,
@@ -405,14 +406,8 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(actuators.exv, gain.u) annotation (Line(points={{-177.95,-59.95},{-194,-59.95},{-194,
-          0},{-165.6,0}}, color={0,0,0}), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(actuators.comp, limiter.u) annotation (Line(points={{-177.95,-59.95},{122,-59.95},
-          {122,-22},{194,-22},{194,0},{187.6,0}},
+  connect(actuators.comp, limiter.u) annotation (Line(points={{-177.95,-59.95},{124,-59.95},{
+          124,-28},{196,-28},{196,0},{187.6,0}},
                                         color={0,0,0}), Text(
       string="%first",
       index=-1,
@@ -467,6 +462,52 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(limiter1.u, actuators.exv) annotation (Line(points={{-143.6,14},{-160,14},{-160,-59.95},
+          {-177.95,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(limiter1.y, gain.u)
+    annotation (Line(points={{-125.2,14},{-113.6,14}}, color={0,0,127}));
+  connect(gain.y, valve.effectiveFlowArea_in)
+    annotation (Line(points={{-95.2,14},{-85,14}}, color={0,0,127}));
+  connect(realExpression6.y, sensors.fillingLevelSeparator) annotation (Line(points={{161,-146},
+          {184,-146},{184,-59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(realExpression7.y, sensors.COP) annotation (Line(points={{161,-164},{184,-164},{184,
+          -59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(realExpression8.y, sensors.TliqOutlet_degC) annotation (Line(points={{161,-180},{184,
+          -180},{184,-59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(realExpression9.y, sensors.TairOutlet_degC) annotation (Line(points={{161,-196},{184,
+          -196},{184,-59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(realExpression10.y, sensors.m_flow_air) annotation (Line(points={{161,-214},{184,-214},
+          {184,-59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(realExpression11.y, sensors.mass_ice) annotation (Line(points={{161,-230},{184,
+          -230},{184,-59.95},{200.05,-59.95}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
   annotation (Diagram(coordinateSystem(extent={{-180,-120},{200,120}})), Icon(
         coordinateSystem(extent={{-180,-120},{200,120}})));
 end HeatPumpCycle_Propane;

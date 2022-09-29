@@ -17,7 +17,7 @@ block ContinuousController "Continuos PI controllers and time based defrosting"
     k=0.01,
     Ti=100,
     yMax=1,
-    yMin=0,
+    yMin=0.1,
     yInitial=0.3,
     use_activeInput=true,
     activationTime=100)
