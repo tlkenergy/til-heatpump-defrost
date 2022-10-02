@@ -14,6 +14,7 @@ expandable connector Sensors
   Real TliqOutlet_degC;
   Real TairOutlet_degC;
   Real m_flow_air;
+  Real mass_ice;
 
   // StatePoints
   SI.Pressure p0;
