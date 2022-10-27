@@ -5,7 +5,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   // Heatpump Cycle
   TIL.HeatExchangers.Plate.VLEFluidLiquid.ParallelFlowHX
                                condenser(
-    redeclare TIL.HeatExchangers.Plate.Geometry.Example hxGeometry,
+    redeclare TIL.HeatExchangers.Plate.Geometry.Example hxGeometry(numberOfPlates=20),
     nCells=15,
     pressureStateID=1,
     redeclare model PressureDropModel_a =
