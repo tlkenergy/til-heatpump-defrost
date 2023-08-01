@@ -200,7 +200,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Modelica.Blocks.Interfaces.RealOutput fillingLevelSeparator = separator.fillingLevel annotation (Placement);
   */
 
-  SI.Mass mass_ice = evaporator.summary.mass_water;
+  SI.Mass mass_ice = sum(evaporator.moistAirCell.massFilm.*(ones(evaporator.nCells)-evaporator.moistAirCell.x));
 
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC annotation (Placement(
         transformation(
