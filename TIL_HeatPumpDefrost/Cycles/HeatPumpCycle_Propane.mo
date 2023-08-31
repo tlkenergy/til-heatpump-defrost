@@ -52,8 +52,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
         origin={-80,14},
         extent={{-8,4},{8,-4}},
         rotation=270)));
-  TIL.HeatExchangers.FinAndTube.MoistAirVLEFluid.CrossFlowHX
-                              evaporator(
+  HeatExchangers.FinAndTube.MoistAirVLEFluid.CrossFlowHX evaporator(
     redeclare TIL.HeatExchangers.FinAndTube.Geometry.KKI001 hxGeometry,
     pressureStateID=2,
     nCells=10,
@@ -63,15 +62,16 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     redeclare model WallMaterial = TILMedia.SolidTypes.TILMedia_Copper,
     redeclare model FinSideHeatTransferModel =
         TIL.HeatExchangers.FinAndTube.TransportPhenomena.FinSideHeatTransfer.ConstantAlpha
-        ( constantAlpha=80),
+        (constantAlpha=80),
     redeclare model FinSidePressureDropModel =
         TIL.HeatExchangers.FinAndTube.TransportPhenomena.FinSidePressureDrop.Haaf,
+
     moistAirCellFlowType="flow A-B",
     flagActivateDynWaterBalance=true,
     pVLEFluidStart=200000,
     TInitialWall=276.15,
-    splittingModeMoistAir="momentum balance")
-                             annotation (Placement(transformation(
+    splittingModeMoistAir="momentum balance") annotation (Placement(
+        transformation(
         origin={-18,-10},
         extent={{14,-14},{-14,14}},
         rotation=180)));
@@ -200,7 +200,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Modelica.Blocks.Interfaces.RealOutput fillingLevelSeparator = separator.fillingLevel annotation (Placement);
   */
 
-  SI.Mass mass_ice = sum(evaporator.moistAirCell.massFilm.*(ones(evaporator.nCells)-evaporator.moistAirCell.x));
+  //SI.Mass mass_ice = sum(evaporator.moistAirCell.massFilm.*(ones(evaporator.nCells)-evaporator.moistAirCell.x));
 
   Modelica.Blocks.Math.UnitConversions.From_degC from_degC annotation (Placement(
         transformation(
@@ -248,7 +248,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     annotation (Placement(transformation(extent={{140,-206},{160,-186}})));
   Modelica.Blocks.Sources.RealExpression realExpression10(y=evaporator.summary.m_flow_air_A)
     annotation (Placement(transformation(extent={{140,-224},{160,-204}})));
-  Modelica.Blocks.Sources.RealExpression realExpression11(y=mass_ice)
+  Modelica.Blocks.Sources.RealExpression realExpression11(y=evaporator.mass_ice)
     annotation (Placement(transformation(extent={{140,-240},{160,-220}})));
 equation
 
