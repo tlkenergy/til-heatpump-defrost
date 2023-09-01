@@ -90,13 +90,26 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},
             {80,80}}), graphics={
         Polygon(
+          points={{-20,60},{0,20},{20,60},{-20,60}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          lineThickness=1),
+        Polygon(
           points={{-80,60},{-60,20},{-40,60},{-80,60}},
           lineColor={0,0,0},
           fillColor={175,175,175},
           fillPattern=FillPattern.Solid,
           lineThickness=1),
         Polygon(
-          points={{-20,60},{0,20},{20,60},{-20,60}},
+          points={{-80,60},{-60,20},{-40,60},{-80,60}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          lineThickness=1,
+          visible=not switch),
+        Polygon(
+          points={{40,60},{60,20},{80,60},{40,60}},
           lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -106,7 +119,8 @@ equation
           lineColor={0,0,0},
           fillColor={175,175,175},
           fillPattern=FillPattern.Solid,
-          lineThickness=1),
+          lineThickness=1,
+          visible=not switch),
         Polygon(
           points={{-20,-60},{0,-20},{20,-60},{-20,-60}},
           lineColor={0,0,0},
@@ -119,27 +133,6 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           lineThickness=1),
-        Polygon(
-          points={{-20,-60},{0,-20},{20,-60},{-20,-60}},
-          lineColor={0,0,0},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid,
-          lineThickness=1,
-          visible= switch),
-        Polygon(
-          points={{-80,60},{-60,20},{-40,60},{-80,60}},
-          lineColor={0,0,0},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid,
-          lineThickness=1,
-          visible= not switch),
-        Polygon(
-          points={{40,60},{60,20},{80,60},{40,60}},
-          lineColor={0,0,0},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid,
-          lineThickness=1,
-          visible=switch),
         Line(
           points={{4,-8},{4,-48}},
           color={153,204,0},
