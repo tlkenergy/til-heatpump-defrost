@@ -86,7 +86,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
 
   TIL.VLEFluidComponents.PressureStateElements.PressureState pressureState_hp(
       pressureStateID=1, pInitial=1500000) annotation (Placement(transformation(
-          extent={{-54,58},{-42,70}}, rotation=0)));
+          extent={{-46,58},{-34,70}}, rotation=0)));
   TIL.VLEFluidComponents.PressureStateElements.PressureState pressureState_lp(
       pressureStateID=2,
     initPressure="fixedInitialDewTemperature",
@@ -94,9 +94,9 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
     TDewInitial=273.15)                   annotation (Placement(transformation(
           extent={{-52,-16},{-40,-4}},  rotation=0)));
   Components.StatePoint                     statePoint0(stateViewerIndex=0)
-    annotation (Placement(transformation(extent={{42,4},{50,12}},    rotation=0)));
+    annotation (Placement(transformation(extent={{54,6},{62,14}},    rotation=0)));
   Components.StatePoint                     statePoint4(stateViewerIndex=4)
-    annotation (Placement(transformation(extent={{-38,20},{-30,28}},   rotation=
+    annotation (Placement(transformation(extent={{-38,46},{-30,54}},   rotation=
            0)));
   inner TIL.SystemInformationManager sim(
     redeclare TILMedia.GasTypes.VDI4670_MoistAir gasType1,
@@ -127,7 +127,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   TIL.VLEFluidComponents.Sensors.Sensor_subcooling sensor_subcooling(useTimeConstant=true)
     annotation (Placement(transformation(extent={{-82,68},{-74,76}})));
   Components.FourWayValve fourWayValve
-    annotation (Placement(transformation(extent={{22,14},{42,34}})));
+    annotation (Placement(transformation(extent={{22,20},{42,40}})));
   TIL.VLEFluidComponents.PressureStateElements.PressureState pressureState_lp1(
     pressureStateID=3,
     initPressure="fixedInitialDewTemperature",
@@ -136,7 +136,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
           extent={{74,-16},{86,-4}},    rotation=0)));
   TIL.VLEFluidComponents.HydraulicResistors.LinearHydraulicResistor linearHydraulicResistor(
       mdot_nominal=0.1, dp_nominal=1000)
-    annotation (Placement(transformation(extent={{46,-12},{58,-8}})));
+    annotation (Placement(transformation(extent={{54,-12},{66,-8}})));
   // Inputs
   Modelica.Blocks.Continuous.FirstOrder firstOrder_phi_air_in(
     k=1,
@@ -215,7 +215,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   Components.FourWayValve fourWayValve_ph "Only used to dynamically switch ph StatePoints"
     annotation (Placement(transformation(extent={{-64,20},{-44,40}})));
   Components.StatePoint                     statePoint3(stateViewerIndex=3)
-    annotation (Placement(transformation(extent={{-44,44},{-36,52}},   rotation=
+    annotation (Placement(transformation(extent={{-70,46},{-62,54}},   rotation=
            0)));
   TIL.GasComponents.Fans.Fan2ndOrder fan2ndOrder(
     V_flow_nominal=0.3,
@@ -269,7 +269,7 @@ equation
       color={153,204,0},
       thickness=0.5));
   connect(pressureState_hp.portA, condenser.portB_a) annotation (Line(
-      points={{-42,64},{-20,64}},
+      points={{-34,64},{-20,64}},
       color={153,204,0},
       thickness=0.5,
       smooth=Smooth.None));
@@ -289,7 +289,7 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   connect(pressureState_hp.portB, valve.portA) annotation (Line(
-      points={{-54,64},{-80,64},{-80,22}},
+      points={{-46,64},{-80,64},{-80,22}},
       color={153,204,0},
       thickness=0.5));
   connect(separator.portGas, compressor.portA) annotation (Line(
@@ -305,19 +305,19 @@ equation
       color={153,204,0},
       thickness=0.5));
   connect(evaporator.portB_vle, fourWayValve.portA_a) annotation (Line(
-      points={{-4,-10},{22,-10},{22,17},{25,17}},
+      points={{-4,-10},{32,-10},{32,22.5}},
       color={153,204,0},
       thickness=0.5));
   connect(compressor.portB, fourWayValve.portB_b) annotation (Line(
-      points={{106,34},{106,50},{39,50},{39,31}},
+      points={{106,34},{106,50},{24.5,50},{24.5,37.5}},
       color={153,204,0},
       thickness=0.5));
   connect(fourWayValve.portA_b, condenser.portA_a) annotation (Line(
-      points={{25,31},{25,64},{8,64}},
+      points={{32,37.5},{32,64},{8,64}},
       color={153,204,0},
       thickness=0.5));
   connect(statePoint2.sensorPort, fourWayValve.portB_b) annotation (Line(
-      points={{106,54},{106,50},{39,50},{39,31}},
+      points={{106,54},{106,50},{24.5,50},{24.5,37.5}},
       color={153,204,0},
       thickness=0.5));
   connect(pressureState_lp1.portA, separator.portInlet) annotation (Line(
@@ -325,11 +325,11 @@ equation
       color={153,204,0},
       thickness=0.5));
   connect(fourWayValve.portB_a, linearHydraulicResistor.portA) annotation (Line(
-      points={{39,17},{39,-10},{46,-10}},
+      points={{39.5,37.5},{39.5,42},{50,42},{50,-10},{54,-10}},
       color={153,204,0},
       thickness=0.5));
   connect(linearHydraulicResistor.portB, pressureState_lp1.portB) annotation (Line(
-      points={{58,-10},{74,-10}},
+      points={{66,-10},{74,-10}},
       color={153,204,0},
       thickness=0.5));
   connect(limiter.y, firstOrder_comp.u)
@@ -349,25 +349,26 @@ equation
   connect(from_degC1.y, firstOrder_liq_Vflow_in1.u)
     annotation (Line(points={{-149.4,60},{-139.6,60}}, color={0,0,127}));
   connect(statePoint0.sensorPort, linearHydraulicResistor.portA) annotation (Line(
-      points={{46,4},{46,0},{39,0},{39,-10},{46,-10}},
+      points={{58,6},{58,2},{50,2},{50,-10},{54,-10}},
       color={153,204,0},
       thickness=0.5));
   connect(fourWayValve_ph.portB_a,statePoint4. sensorPort) annotation (Line(
-      points={{-47,23},{-47,14},{-34,14},{-34,20}},
+      points={{-46.5,37.5},{-46,37.5},{-46,42},{-34,42},{-34,46}},
       color={153,204,0},
       thickness=0.5));
   connect(statePoint3.sensorPort, fourWayValve_ph.portB_b) annotation (Line(
-      points={{-40,44},{-40,37},{-47,37}},
+      points={{-66,46},{-66,42},{-62,42},{-62,37.5},{-61.5,37.5}},
       color={153,204,0},
       thickness=0.5));
   connect(fourWayValve_ph.switch, fourWayValve.switch)
-    annotation (Line(points={{-54,20},{-54,6},{32,6},{32,14}}, color={255,0,255}));
+    annotation (Line(points={{-42.75,30},{-34,30},{-34,12},{48,12},{48,30},{
+          43.25,30}},                                          color={255,0,255}));
   connect(fourWayValve_ph.portA_a, valve.portB) annotation (Line(
-      points={{-61,23},{-61,-10},{-80,-10},{-80,6}},
+      points={{-54,22.5},{-54,-10},{-80,-10},{-80,6}},
       color={153,204,0},
       thickness=0.5));
   connect(fourWayValve_ph.portA_b, valve.portA) annotation (Line(
-      points={{-61,37},{-61,64},{-80,64},{-80,22}},
+      points={{-54,37.5},{-54,64},{-80,64},{-80,22}},
       color={153,204,0},
       thickness=0.5));
 
@@ -414,8 +415,9 @@ equation
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(fourWayValve.switch, actuators.reverseCycle) annotation (Line(points={{32,14},{32,
-          6},{-64,6},{-64,-59.95},{-177.95,-59.95}}, color={255,0,255}), Text(
+  connect(fourWayValve.switch, actuators.reverseCycle) annotation (Line(points={{43.25,
+          30},{48,30},{48,12},{-34,12},{-34,-59.95},{-177.95,-59.95}},
+                                                     color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
