@@ -101,7 +101,7 @@ model HeatPumpCycle_Propane "Heat Pump Cycle"
   inner TIL.SystemInformationManager sim(
     redeclare TILMedia.GasTypes.VDI4670_MoistAir gasType1,
     redeclare replaceable TILMedia.LiquidTypes.TILMedia_Water liquidType1,
-    redeclare replaceable TILMedia.VLEFluidTypes.TILMediaSpline_PROPANE_60x60 vleFluidType1)
+    redeclare replaceable VLEFluidTypes.TILMedia_Propane vleFluidType1)
     annotation (Placement(transformation(extent={{160,80},{180,100}})));
   TIL.VLEFluidComponents.Separators.Separator separator(
     pressureStateID=3,
